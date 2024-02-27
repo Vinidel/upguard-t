@@ -43,3 +43,4 @@ npm run lint
 - Retry strategy is not implemented, there should be a way to retry in case of any errors.
 - Qflow doesn't expose methods to shutdown the processor, as detailed in cosiderations qflow should not be used in the real world.
 - JobFn has a specific type it should be a generic function type so it can be re-used in different scenarios
+- Some of the tests are run with a wait function that is probably not scalable
