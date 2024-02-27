@@ -63,7 +63,7 @@ describe("Processor", () => {
   });
 
   test("sets job status to queued when job hasn't been processed", async () => {
-    const mockedJob = () => new Promise<string>((resolve) => resolve("Mulan McNugget Sauce"));
+    const mockedJob = () => new Promise<string>((resolve) => resolve("To Live Is To Risk It All"));
     const frequency = 5;
     const size = 2;
     const p = new QueueProcessor({ size, frequencyInMilliSeconds: frequency });
@@ -88,7 +88,7 @@ describe("Processor", () => {
   });
 
   test("sets job result value when job is processed successfully", async () => {
-    const mockedResult = "Mulan McNugget Sauce";
+    const mockedResult = "Boom! Big reveal!";
     const mockedJob = () => new Promise<string>((resolve) => resolve(mockedResult));
     const frequency = 5;
     const size = 2;
@@ -99,11 +99,12 @@ describe("Processor", () => {
     // Wait for start function to start processing jobs
     await wait();
     const j = p.getJob(firstJob.id);
-    expect(j?.result).toEqual("Mulan McNugget Sauce");
+    expect(j?.result).toEqual("Boom! Big reveal!");
   });
 
   test("does not shutdown if queue is still being processed", async () => {
-    const mockedJob = () => new Promise<string>((resolve) => resolve("Mulan McNugget Sauce"));
+    const mockedJob = () =>
+      new Promise<string>((resolve) => resolve("Sometimes science is more art than science"));
     const frequency = 5;
     const size = 2;
     const p = new QueueProcessor({ size, frequencyInMilliSeconds: frequency });
@@ -117,7 +118,10 @@ describe("Processor", () => {
   });
 
   test("shutdown if all jobs have been processed", async () => {
-    const mockedJob = () => new Promise<string>((resolve) => resolve("Mulan McNugget Sauce"));
+    const mockedJob = () =>
+      new Promise<string>((resolve) =>
+        resolve("so everyone’s supposed to sleep every single night now?"),
+      );
     const frequency = 5;
     const size = 2;
     const p = new QueueProcessor({ size, frequencyInMilliSeconds: frequency });
@@ -133,7 +137,8 @@ describe("Processor", () => {
   });
 
   test("sets queue to empty after shutdown", async () => {
-    const mockedJob = () => new Promise<string>((resolve) => resolve("Mulan McNugget Sauce"));
+    const mockedJob = () =>
+      new Promise<string>((resolve) => resolve("Sometimes science is more art than science"));
     const frequency = 5;
     const size = 2;
     const p = new QueueProcessor({ size, frequencyInMilliSeconds: frequency });
@@ -149,7 +154,7 @@ describe("Processor", () => {
   });
 
   test("processes jobs that were added after the processor has started", async () => {
-    const mockedJob = () => new Promise<string>((resolve) => resolve("Mulan McNugget Sauce"));
+    const mockedJob = () => new Promise<string>((resolve) => resolve("get schwifty"));
     const frequency = 5;
     const size = 2;
     const p = new QueueProcessor({ size, frequencyInMilliSeconds: frequency });
