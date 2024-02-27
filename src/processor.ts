@@ -1,5 +1,10 @@
 import qflow from "qflow";
 
+type CustomQFlowType = {
+  deq: () => void;
+  enq: (j: JobTypeWithJobFn) => void;
+};
+
 type JobType = {
   id: number;
   status: "queued" | "finished";
@@ -25,10 +30,10 @@ class QueueProcessor {
   #results: JobTypeWithResult[];
   #size: number;
   #frequencyInMilliSeconds: number;
+  #qFlowInstance: CustomQFlowType | undefined;
 
   // Mocked auto increment unique id value
   #uniqueID = 1;
-  #qFlowInstance: any;
 
   constructor({ size, frequencyInMilliSeconds }: CreateProcessorConfigType) {
     this.#size = size;
@@ -79,7 +84,7 @@ class QueueProcessor {
 
     // Call qflow.enq if processor has started
     if (this.#hasStartedProcessingJobs()) {
-      this.#qFlowInstance.enq({ ...newJob, jobFn });
+      this.#qFlowInstance?.enq({ ...newJob, jobFn });
     }
 
     return newJob;
@@ -111,13 +116,13 @@ class QueueProcessor {
       .start(this.#size);
   }
 
-  // Returns the current status of the job with equal id
+  // Returns the current status of the job
   getJobStatus(jobId: number): string | undefined {
     const foundJob = this.#results.find((j: JobType) => j.id === jobId);
     return foundJob?.status;
   }
 
-  // Returns the job result
+  // Returns the job result object if it exists
   getJob(jobId: number): JobTypeWithResult | undefined {
     const foundJob = this.#results.find((j: JobType) => j.id === jobId);
     return foundJob;
